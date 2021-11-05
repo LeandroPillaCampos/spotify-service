@@ -10,6 +10,7 @@ import java.util.List;
 @Configuration
 public class TrackConfiguration {
 
+    @Bean ("track")
     public List<Track> getListTrack(){
         return Arrays.asList(
                 Track.builder().id(1L).name("It's My Life").idAlbum(1L).idArtist(1L).reproduction(0L).duration(4.27).build(),

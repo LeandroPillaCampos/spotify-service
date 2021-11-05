@@ -4,7 +4,7 @@ import com.spotify.spotifyservice.domain.model.Album;
 
 import java.util.List;
 
-public interface IAlbumService {
+public interface IAlbumService extends IArtistService {
 
     List<Album> getAlbumList();
     Album getAlbum();

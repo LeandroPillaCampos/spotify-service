@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface ITrackService {
+public interface ITrackService extends IAlbumService {
 
     List<Track> getTrackList();
     Track getTrack();

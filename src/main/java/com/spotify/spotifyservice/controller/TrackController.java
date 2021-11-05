@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/spotify/play/track/")
 public class TrackController {
-    
+
     @Autowired
     ITrackService TService;
 

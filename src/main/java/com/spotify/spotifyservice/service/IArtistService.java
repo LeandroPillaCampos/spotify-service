@@ -10,7 +10,7 @@ import java.util.List;
 public interface IArtistService {
 
     List<Artist> getArtisList();
-    Artist getArtist();
+    Artist getArtist(Long idArtist);
     Artist createArtist(ArtistRequest request);
     void updateArtist (Long idArtist);
 

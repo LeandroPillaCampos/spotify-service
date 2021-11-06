@@ -40,8 +40,10 @@ public class AlbumService  implements IAlbumService {
         return null;
     }
 
+
+
     @Override
-    public Artist getArtist() {
+    public Artist getArtist(Long idArtist) {
         return null;
     }
 

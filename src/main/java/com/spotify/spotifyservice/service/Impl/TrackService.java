@@ -6,9 +6,11 @@ import com.spotify.spotifyservice.controller.request.TrackRequest;
 import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
+import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -24,47 +26,63 @@ public class TrackService  implements ITrackService {
     @Autowired
     private ITrackService TService;
 
-    @Qualifier("track")
     @Autowired
     private List<Track> Ltrack;
 
+    @Autowired
+    TrackRepository TRepository;
 
     @PostConstruct
     public void init() {
-        TrackMap = new TreeMap<>();
         Ltrack.stream().forEach(track -> {
-            TrackMap.put(track.getId(), track);
+            //TrackMap.put(track.getId(), track);
+            TRepository.save(track);
         });
     }
 
     private Map<Long, Track> TrackMap;
 
     @Override
-    public List<Track> getTrackList() {
-        return Ltrack;
+    public Iterable<Track> getTrackList() {
+        //List<Track> tracks= (List<Track>) TRepository.findAll();
+        return TRepository.findAll();
     }
 
     @Override
     public List<Track> getTList(Long id) {
         List<Track> topFive = new ArrayList<>();
+        topFive.stream().forEach(toptrack ->
+                topFive.add(
+                        Track.builder()
+                                .idArtist(id).name(TrackMap.get(id).getName())
+                                .reproduction(TrackMap.get(id).getReproduction()).build())
 
-        topFive.add(
-        Track.builder()
-                .idArtist(id).name(TrackMap.get(id).getName())
-                .reproduction(TrackMap.get(id).getReproduction()).build()
-        );
+                );
 
-        return topFive;
+
+        return Ltrack;
     }
 
     @Override
-    public Track getTrackList(Long id) {
+    public ResponseEntity<Track> getTrack(Long id) {
 
-        TrackMap.get(id).setReproduction(TrackMap.get(id).getReproduction()+1);
+        //TrackMap.get(id).setReproduction(TrackMap.get(id).getReproduction()+1);
+        Optional<Track> optionalTrack= TRepository.findById(id);
 
-        return TrackMap.get(id);
+        if(optionalTrack.isPresent()){
+            Track countTrack= optionalTrack.get();
+            countTrack.setReproduction(optionalTrack.get().getReproduction()+1);
+            TRepository.save(countTrack);
+
+            return ResponseEntity.ok(countTrack);
+        }else return ResponseEntity.noContent().build();
+
+
+
+       // return null;
     }
 
+/*
     @Override
     public Track getTrack(Long id) {
 
@@ -73,8 +91,11 @@ public class TrackService  implements ITrackService {
 
         return TrackMap.get(id);
 
+      //  return null;
     }
 
+
+ */
     @Override
     public Track createTrack(TrackRequest request) {
         return null;
@@ -110,8 +131,10 @@ public class TrackService  implements ITrackService {
         return null;
     }
 
+
+
     @Override
-    public Artist getArtist() {
+    public Artist getArtist(Long idArtist) {
         return null;
     }
 

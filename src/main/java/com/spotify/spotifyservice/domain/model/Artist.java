@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -22,5 +24,10 @@ public class Artist {
     private String name;
     private String genre;
     private String image;
+
+
+    @OneToMany(mappedBy = "joinArtist")
+    private List<Album> joinAlbum=new ArrayList<>();
+
 
 }

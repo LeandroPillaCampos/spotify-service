@@ -25,5 +25,9 @@ public class Track {
     private Long reproduction;
     private Double duration;
 
+    @ManyToOne
+    @JoinColumn(name = "FKAlbum")
+    private Album joinAlbum;
+
 
 }

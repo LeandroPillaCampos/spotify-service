@@ -4,6 +4,7 @@ import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.ITrackService;
+import com.spotify.spotifyservice.service.Impl.ArtistService;
 import com.spotify.spotifyservice.service.Impl.TrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class TrackController {
     @Autowired
     private TrackService TService;
 
+    @Autowired
+    private ArtistService AService;
+
+
     @GetMapping("/tracks")
     public Iterable<Track> getAllTracks(){
         return TService.getTrackList();
@@ -44,6 +49,12 @@ public class TrackController {
     public ResponseEntity<Track> getReproductions(@PathVariable("trackId")Long id){
         return TService.getTrack(id);
     }
+
+    @GetMapping("/artist/{artistId}/songs/rank")
+    public ResponseEntity<List<Track>> getTopFive(@PathVariable("artistId") Long idArtist){
+        return TService.getTopFiveTrack(idArtist);
+    }
+
 
 
 

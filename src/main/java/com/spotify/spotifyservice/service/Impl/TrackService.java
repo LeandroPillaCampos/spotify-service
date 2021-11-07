@@ -6,6 +6,7 @@ import com.spotify.spotifyservice.controller.request.TrackRequest;
 import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
+import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,13 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
 @Qualifier ("track")
-public class TrackService  implements ITrackService {
+public class TrackService  implements ITrackService , Comparable<Track>{
 
     @Autowired
     private ITrackService TService;
@@ -31,6 +33,9 @@ public class TrackService  implements ITrackService {
 
     @Autowired
     TrackRepository TRepository;
+
+    @Autowired
+    ArtistRepository ARespository;
 
     @PostConstruct
     public void init() {
@@ -49,18 +54,20 @@ public class TrackService  implements ITrackService {
     }
 
     @Override
-    public List<Track> getTList(Long id) {
-        List<Track> topFive = new ArrayList<>();
-        topFive.stream().forEach(toptrack ->
-                topFive.add(
-                        Track.builder()
-                                .idArtist(id).name(TrackMap.get(id).getName())
-                                .reproduction(TrackMap.get(id).getReproduction()).build())
-
+    public ResponseEntity<List<Track>> getTopFiveTrack(Long id) {
+        Iterable<Track> AllTracks=TRepository.findAll();
+        List<Track> TracksforArtist=new ArrayList<>();
+        for(Track track: AllTracks){
+            if(track.getIdArtist().equals(id)){
+                TracksforArtist.add(
+                        Track.builder().id(track.getId()).idArtist(track.getIdArtist()).idAlbum(track.getIdAlbum()).name(track.getName()).reproduction(track.getReproduction()).duration(track.getDuration()).build()
                 );
+            }
+        }
 
-
-        return Ltrack;
+        TracksforArtist.sort(Comparator.comparing(Track::getReproduction).reversed());
+        
+        return ResponseEntity.ok(TracksforArtist);
     }
 
     @Override
@@ -76,10 +83,6 @@ public class TrackService  implements ITrackService {
 
             return ResponseEntity.ok(countTrack);
         }else return ResponseEntity.noContent().build();
-
-
-
-       // return null;
     }
 
 /*
@@ -134,7 +137,23 @@ public class TrackService  implements ITrackService {
 
 
     @Override
-    public Artist getArtist(Long idArtist) {
+    public ResponseEntity<Artist> getArtist(Long idArtist) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<Artist>> getTopFive(Long idArtist) {
+    /*
+        Optional<Iterable<Artist>> artist=ARespository.f(idArtist);
+
+        Optional<Track> optionalTrack=TRepository.findAllById(artist.get().getIdArtist());
+
+        if(optionalTrack.isPresent()){
+            ResponseEntity.ok();
+        }else return ResponseEntity.noContent().build();
+
+
+     */
         return null;
     }
 
@@ -146,5 +165,11 @@ public class TrackService  implements ITrackService {
     @Override
     public void updateArtist(Long idArtist) {
 
+    }
+
+    @Override
+    public int compareTo(Track track) {
+
+        return 0;
     }
 }

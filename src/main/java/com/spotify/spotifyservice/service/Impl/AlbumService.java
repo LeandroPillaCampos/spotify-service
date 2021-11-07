@@ -6,6 +6,7 @@ import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.service.IAlbumService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,7 +44,12 @@ public class AlbumService  implements IAlbumService {
 
 
     @Override
-    public Artist getArtist(Long idArtist) {
+    public ResponseEntity<Artist> getArtist(Long idArtist) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<Artist>> getTopFive(Long idArtist) {
         return null;
     }
 

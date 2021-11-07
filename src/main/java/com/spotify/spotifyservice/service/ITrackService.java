@@ -15,7 +15,7 @@ import java.util.Map;
 public interface ITrackService extends IAlbumService {
 
     Iterable<Track> getTrackList();
-    List<Track> getTList(Long id);
+    ResponseEntity<List<Track>> getTopFiveTrack(Long id);
     ResponseEntity<Track> getTrack(Long id);
     Track createTrack(TrackRequest request);
     void updateTrack (Long id);

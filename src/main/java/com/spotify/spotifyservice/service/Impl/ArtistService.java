@@ -4,13 +4,16 @@ import com.spotify.spotifyservice.controller.ArtistController;
 import com.spotify.spotifyservice.controller.request.ArtistRequest;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
+import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.service.IArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Qualifier("artist")
@@ -20,6 +23,8 @@ public class ArtistService implements IArtistService {
     //@Qualifier("artist")
     private List<Artist> artists;
 
+    @Autowired
+    private ArtistRepository ARepository;
 
     @Override
     public List<Artist> getArtisList() {
@@ -28,21 +33,19 @@ public class ArtistService implements IArtistService {
 
 
     @Override
-    public Artist getArtist(Long idArtist) {
+    public ResponseEntity<Artist> getArtist(Long idArtist) {
+    /*
+        Optional<Artist> optionalArtist=ARepository.findById(idArtist);
+        optionalArtist.
+        if(optionalArtist.isPresent()){
+            ResponseEntity.ok();
+        }else return ResponseEntity.noContent().build();
+    */
+        return null;
+    }
 
-
-
-        /*
-        List<Track> topFive = new ArrayList<>();
-
-        topFive.add(
-                Track.builder()
-                        .idArtist(id).name(TrackMap.get(id).getName())
-                        .reproduction(TrackMap.get(id).getReproduction()).build()
-        );
-        */
-
-
+    @Override
+    public ResponseEntity<List<Artist>> getTopFive(Long idArtist) {
         return null;
     }
 

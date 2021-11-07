@@ -16,7 +16,7 @@ public interface ITrackService extends IAlbumService {
 
     Iterable<Track> getTrackList();
     ResponseEntity<List<Track>> getTopFiveTrack(Long id);
-    ResponseEntity<List<Artist>> getTopFiveArtist();
+    ResponseEntity<List<Track>> getTopFivePopulars();
     ResponseEntity<Track> getTrack(Long id);
     Track createTrack(TrackRequest request);
     void updateTrack (Long id);

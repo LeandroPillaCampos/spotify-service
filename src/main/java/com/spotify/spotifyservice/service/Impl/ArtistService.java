@@ -101,7 +101,7 @@ public class ArtistService implements IArtistService {
             }
 
         }
-        
+
         return ResponseEntity.ok(TopFiveArtist);
     }
 

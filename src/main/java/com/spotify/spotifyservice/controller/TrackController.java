@@ -60,9 +60,13 @@ public class TrackController {
     public ResponseEntity<List<Track>> getTopFiveArtist(){
         return AService.getTopFiveArtist();
     }
-
-
      */
+
+    @GetMapping("/track/rank")
+    public ResponseEntity<List<Track>> getTopFivePopulars(){
+        return TService.getTopFivePopulars();
+    }
+
 
     }
 

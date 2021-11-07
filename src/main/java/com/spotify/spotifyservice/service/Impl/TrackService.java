@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Qualifier ("track")
@@ -67,6 +68,25 @@ public class TrackService  implements ITrackService{
         TracksforArtist.sort(Comparator.comparing(Track::getReproduction).reversed());
 
         return ResponseEntity.ok(TracksforArtist);
+    }
+
+    @Override
+    public ResponseEntity<List<Track>> getTopFivePopulars() {
+
+        Iterable<Track> AllTracks=TRepository.findAll();
+
+        //Iterable to List
+        List<Track> PopularsTracks= StreamSupport
+                .stream(AllTracks.spliterator(), false)
+                .collect(Collectors.toList());
+
+        //Sort by getReproduction
+        PopularsTracks.sort(Comparator.comparing(Track::getReproduction).reversed());
+
+        //Truncate PopularsTracks by 5
+        PopularsTracks.stream().limit(5);
+
+        return ResponseEntity.ok(PopularsTracks);
     }
 
     @Override

@@ -15,14 +15,12 @@ public class ArtistConfiguration {
 
 
     @Bean("artist")
-    public List<Artist> getArtist(){
+    public List<Artist> getArtists(){
         return Arrays.asList(
                 Artist.builder().idArtist(1L).name("Bon Jovi").genre("Male").image("image").build(),
-                Artist.builder().idArtist(1L).name("The Rolling Stones").genre("Male").image("image").build(),
-                Artist.builder().idArtist(1L).name("The Police").genre("Male").image("image").build(),
-                Artist.builder().idArtist(1L).name("Eminem").genre("Male").image("image").build()
-
-
+                Artist.builder().idArtist(2L).name("The Rolling Stones").genre("Male").image("image").build(),
+                Artist.builder().idArtist(3L).name("The Police").genre("Male").image("image").build(),
+                Artist.builder().idArtist(4L).name("Eminem").genre("Male").image("image").build()
         );
     }
 }

@@ -29,7 +29,7 @@ public class Album {
 
 
     @ManyToOne
-    @JoinColumn(name = "FKArtist")
+    @JoinColumn()
     private Artist joinArtist;
 
 

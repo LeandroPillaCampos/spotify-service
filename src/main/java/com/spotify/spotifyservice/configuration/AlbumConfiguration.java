@@ -2,13 +2,15 @@ package com.spotify.spotifyservice.configuration;
 
 import com.spotify.spotifyservice.domain.model.Album;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Configuration
 public class AlbumConfiguration {
 
-    @Bean("Album")
+    @Bean("album")
     public List<Album> getListAlbum(){
         return Arrays.asList(
                 Album.builder().idAlbum(1L).idArtist(1L).name("Crush").build(),

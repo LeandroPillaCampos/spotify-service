@@ -51,12 +51,18 @@ public class TrackController {
     }
 
     @GetMapping("/artist/{artistId}/songs/rank")
-    public ResponseEntity<List<Track>> getTopFive(@PathVariable("artistId") Long idArtist){
+    public ResponseEntity<List<Track>> getTopFiveTracks(@PathVariable("artistId") Long idArtist){
         return TService.getTopFiveTrack(idArtist);
     }
 
+    /*
+    @GetMapping("/artist/rank")
+    public ResponseEntity<List<Track>> getTopFiveArtist(){
+        return AService.getTopFiveArtist();
+    }
 
 
+     */
 
     }
 

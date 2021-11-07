@@ -4,6 +4,7 @@ import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.service.IArtistService;
+import com.spotify.spotifyservice.service.Impl.ArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/artist/")
+@RequestMapping("/")
 public class ArtistController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class ArtistController {
 
     @Autowired
     @Qualifier("artist")
-    private IArtistService AService;
+    private ArtistService AService;
 
     @GetMapping("/list")
     public List<Artist> retriveArtist() {
@@ -39,6 +40,10 @@ public class ArtistController {
         return AService.getArtist(idArtist);
     }
      */
+    @GetMapping("/artist/rank")
+    public ResponseEntity<List<Artist>> getTopFiveArtist(){
+        return AService.getTopFiveArtist();
+    }
 
 
 

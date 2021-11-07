@@ -26,7 +26,7 @@ public class Track {
     private Double duration;
 
     @ManyToOne
-    @JoinColumn(name = "FKAlbum")
+    @JoinColumn()
     private Album joinAlbum;
 
 

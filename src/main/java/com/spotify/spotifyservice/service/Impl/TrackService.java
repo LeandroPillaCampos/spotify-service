@@ -3,15 +3,19 @@ package com.spotify.spotifyservice.service.Impl;
 import com.spotify.spotifyservice.controller.request.AlbumRequest;
 import com.spotify.spotifyservice.controller.request.ArtistRequest;
 import com.spotify.spotifyservice.controller.request.TrackRequest;
+import com.spotify.spotifyservice.domain.mapper.TrackMapper;
 import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
+import com.spotify.spotifyservice.exception.TrackExistException;
 import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.IArtistService;
 import com.spotify.spotifyservice.service.ITrackService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 @Service
 @Qualifier ("track")
 public class TrackService  implements ITrackService{
@@ -37,6 +42,9 @@ public class TrackService  implements ITrackService{
     @Autowired
     private TrackRepository TRepository;
 
+    @Autowired
+    private TrackMapper trackMapper;
+
     @PostConstruct
     public void init() {
         Ltrack.stream().forEach(track -> {
@@ -45,7 +53,7 @@ public class TrackService  implements ITrackService{
         });
     }
 
-    private Map<Long, Track> TrackMap;
+    //private Map<Long, Track> TrackMap;
 
     @Override
     public Iterable<Track> getTrackList() {
@@ -119,8 +127,16 @@ public class TrackService  implements ITrackService{
 
  */
     @Override
-    public Track createTrack(TrackRequest request) {
-        return null;
+    public ResponseEntity<Track> createTrack(TrackRequest request) {
+        Track track = trackMapper.apply(request);
+        if (request.getId() != null && TRepository.findById(request.getId()) != null) {
+            log.error("El Pinnaper ya existe");
+            throw new TrackExistException("El Pinnaper ya existe");
+        } else {
+            TRepository.save(trackMapper.apply(request));
+        }
+
+        return ResponseEntity.ok(track);
     }
 
     @Override

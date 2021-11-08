@@ -1,5 +1,6 @@
 package com.spotify.spotifyservice.controller;
 
+import com.spotify.spotifyservice.controller.request.TrackRequest;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.repositories.TrackRepository;
@@ -10,11 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,16 +35,12 @@ public class TrackController {
     private ArtistService AService;
 
 
+
     @GetMapping("/tracks")
     public Iterable<Track> getAllTracks(){
         return TService.getTrackList();
     }
-    /*
-    @GetMapping(path = "/artist/{artistId}/songs/rank")
-    public List<Track> topFive(@PathVariable("artistId")Long idArtist){
-        return Arrays.asList(this.TService.getTrackList(idArtist));
-    }
-*/
+
     @GetMapping(path = "/spotify/play/track/{trackId}")
     public ResponseEntity<Track> getReproductions(@PathVariable("trackId")Long id){
         return TService.getTrack(id);
@@ -55,16 +51,17 @@ public class TrackController {
         return TService.getTopFiveTrack(idArtist);
     }
 
-    /*
-    @GetMapping("/artist/rank")
-    public ResponseEntity<List<Track>> getTopFiveArtist(){
-        return AService.getTopFiveArtist();
-    }
-     */
-
     @GetMapping("/track/rank")
     public ResponseEntity<List<Track>> getTopFivePopulars(){
         return TService.getTopFivePopulars();
+    }
+    /*PUT /track/{trackId}
+    GET /track/{trackId}
+    DELETE /track/{artistId}
+     */
+    @PostMapping("/track")
+    public ResponseEntity<Track> postTrack(@Validated @RequestBody TrackRequest request){
+        return TService.createTrack(request);
     }
 
 

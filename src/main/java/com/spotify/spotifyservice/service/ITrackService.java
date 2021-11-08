@@ -14,12 +14,13 @@ import java.util.Map;
 @Service
 public interface ITrackService extends IAlbumService {
 
-    Iterable<Track> getTrackList();
+    //Iterable<Track> getTrackList();
+    ResponseEntity<Track> getTrackID(Long id);
     ResponseEntity<List<Track>> getTopFiveTrack(Long id);
     ResponseEntity<List<Track>> getTopFivePopulars();
     ResponseEntity<Track> getTrack(Long id);
     ResponseEntity<Track> createTrack(TrackRequest request);
-    void updateTrack (Long id);
-
+    ResponseEntity<Track> updateTrack (Long id , TrackRequest request);
+    ResponseEntity<Track> deleteTrack(Long id);
 
 }

@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.xml.ws.Response;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,12 +36,12 @@ public class TrackController {
     private ArtistService AService;
 
 
-
+    /*
     @GetMapping("/tracks")
     public Iterable<Track> getAllTracks(){
         return TService.getTrackList();
     }
-
+     */
     @GetMapping(path = "/spotify/play/track/{trackId}")
     public ResponseEntity<Track> getReproductions(@PathVariable("trackId")Long id){
         return TService.getTrack(id);
@@ -64,7 +65,22 @@ public class TrackController {
         return TService.createTrack(request);
     }
 
-
+    @PutMapping("/track/{trackId}")
+    public ResponseEntity<Track> putTrack(@Validated @RequestBody TrackRequest request, @PathVariable("trackId") Long id){
+        return TService.updateTrack(id ,request);
     }
+
+    @GetMapping("/track/{trackId}")
+    public ResponseEntity<Track> getTrackID(@PathVariable("trackId") Long id){
+        return TService.getTrackID(id);
+    }
+
+    @DeleteMapping("/track/{trackId}")
+        public ResponseEntity<Track> deleteTrack(@PathVariable("trackId") Long id){
+            return TService.deleteTrack(id);
+        }
+    }
+
+
 
 

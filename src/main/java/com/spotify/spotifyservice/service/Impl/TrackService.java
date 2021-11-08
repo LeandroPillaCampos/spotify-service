@@ -8,11 +8,13 @@ import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.exception.TrackExistException;
+import com.spotify.spotifyservice.exception.TrackNotExistException;
 import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.IArtistService;
 import com.spotify.spotifyservice.service.ITrackService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -53,14 +56,23 @@ public class TrackService  implements ITrackService{
         });
     }
 
-    //private Map<Long, Track> TrackMap;
+    @Override
+    public ResponseEntity<Track> getTrackID(Long id) {
+        Optional<Track> optionaTrack=TRepository.findById(id);
+        if(optionaTrack.isPresent()){
+            return ResponseEntity.ok(optionaTrack.get());
+        }else return ResponseEntity.noContent().build();
 
+    }
+
+    //private Map<Long, Track> TrackMap;
+/*
     @Override
     public Iterable<Track> getTrackList() {
         //List<Track> tracks= (List<Track>) TRepository.findAll();
         return TRepository.findAll();
     }
-
+*/
     @Override
     public ResponseEntity<List<Track>> getTopFiveTrack(Long id) {
         Iterable<Track> AllTracks=TRepository.findAll();
@@ -140,8 +152,27 @@ public class TrackService  implements ITrackService{
     }
 
     @Override
-    public void updateTrack(Long id) {
+    public ResponseEntity<Track> updateTrack(Long id, TrackRequest request) {
 
+        Track track=new Track();
+
+        if (TRepository.findById(id) != null) {
+           track= trackMapper.apply(request);
+            TRepository.save(track);
+
+            return ResponseEntity.ok(track);
+        } else {
+            log.error("El Pinnaper NO existe");
+            throw new TrackNotExistException("El Pinnaper NO existe");
+        }
+        //return ResponseEntity.ok(track);
+    }
+
+    @Override
+    public ResponseEntity<Track> deleteTrack(Long id) {
+
+        TRepository.deleteById(id);
+        return null;
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public interface ITrackService extends IAlbumService {
+public interface ITrackService  {
 
     //Iterable<Track> getTrackList();
     ResponseEntity<Track> getTrackID(Long id);

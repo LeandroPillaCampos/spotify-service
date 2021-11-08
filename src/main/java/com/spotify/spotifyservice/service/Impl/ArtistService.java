@@ -124,7 +124,7 @@ public class ArtistService implements IArtistService {
     public ResponseEntity<Artist> updateArtist(Long idArtist, ArtistRequest request) {
         Artist artist=new Artist();
 
-        if (TRepository.findById(idArtist) != null) {
+        if (ARepository.findById(idArtist) != null) {
             artist= artistMapper.apply(request);
             ARepository.save(artist);
 

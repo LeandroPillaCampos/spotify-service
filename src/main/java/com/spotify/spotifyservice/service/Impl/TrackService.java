@@ -51,7 +51,6 @@ public class TrackService  implements ITrackService{
     @PostConstruct
     public void init() {
         Ltrack.stream().forEach(track -> {
-            //TrackMap.put(track.getId(), track);
             TRepository.save(track);
         });
     }
@@ -65,14 +64,6 @@ public class TrackService  implements ITrackService{
 
     }
 
-    //private Map<Long, Track> TrackMap;
-/*
-    @Override
-    public Iterable<Track> getTrackList() {
-        //List<Track> tracks= (List<Track>) TRepository.findAll();
-        return TRepository.findAll();
-    }
-*/
     @Override
     public ResponseEntity<List<Track>> getTopFiveTrack(Long id) {
         Iterable<Track> AllTracks=TRepository.findAll();
@@ -112,7 +103,6 @@ public class TrackService  implements ITrackService{
     @Override
     public ResponseEntity<Track> getTrack(Long id) {
 
-        //TrackMap.get(id).setReproduction(TrackMap.get(id).getReproduction()+1);
         Optional<Track> optionalTrack= TRepository.findById(id);
 
         if(optionalTrack.isPresent()){
@@ -124,20 +114,6 @@ public class TrackService  implements ITrackService{
         }else return ResponseEntity.noContent().build();
     }
 
-/*
-    @Override
-    public Track getTrack(Long id) {
-
-        Ltrack.stream()
-                .filter(track -> track.equals(id)).collect(Collectors.toList());
-
-        return TrackMap.get(id);
-
-      //  return null;
-    }
-
-
- */
     @Override
     public ResponseEntity<Track> createTrack(TrackRequest request) {
         Track track = trackMapper.apply(request);
@@ -165,7 +141,7 @@ public class TrackService  implements ITrackService{
             log.error("Track not exist");
             throw new TrackNotExistException("Track not exist");
         }
-        //return ResponseEntity.ok(track);
+
     }
 
     @Override
@@ -175,78 +151,5 @@ public class TrackService  implements ITrackService{
         return null;
     }
 
-    @Override
-    public List<Album> getAlbumList() {
-        return null;
-    }
-
-    @Override
-    public Album getAlbum() {
-        return null;
-    }
-
-    @Override
-    public Album createAlbum(AlbumRequest request) {
-        return null;
-    }
-
-    @Override
-    public void updateAlbum(Long idAlbum) {
-
-    }
-
-
-
-    @Override
-    public ResponseEntity<Artist> getArtistID(Long idArtist) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<List<Artist>> getTopFiveArtist() {
-
-        /*
-         Iterable<Track> AllTracks=TRepository.findAll();
-        List<Track> TracksforArtist=new ArrayList<>();
-        for(Track track: AllTracks){
-            if(track.getIdArtist().equals(id)){
-                TracksforArtist.add(
-                        Track.builder().id(track.getId()).idArtist(track.getIdArtist()).idAlbum(track.getIdAlbum()).name(track.getName()).reproduction(track.getReproduction()).duration(track.getDuration()).build()
-                );
-            }
-        }
-
-        TracksforArtist.sort(Comparator.comparing(Track::getReproduction).reversed());
-
-        return ResponseEntity.ok(TracksforArtist);
-         */
-
-        Iterable<Track> AllArtists=TRepository.findAll();
-
-        List<Track> artists=new ArrayList<>();
-        for(Track artist: AllArtists){
-
-           // artists.add(Track.builder().);
-
-        }
-
-
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Artist> createArtist(ArtistRequest request) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Artist> updateArtist(Long idArtist, ArtistRequest request) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Artist> deleteArtist(Long idArtist) {
-        return null;
-    }
 
 }

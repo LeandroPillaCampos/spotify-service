@@ -2,11 +2,17 @@ package com.spotify.spotifyservice.service.Impl;
 
 import com.spotify.spotifyservice.controller.ArtistController;
 import com.spotify.spotifyservice.controller.request.ArtistRequest;
+import com.spotify.spotifyservice.domain.mapper.ArtistMapper;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
+import com.spotify.spotifyservice.exception.ArtistExistException;
+import com.spotify.spotifyservice.exception.ArtistNotExistException;
+import com.spotify.spotifyservice.exception.TrackExistException;
+import com.spotify.spotifyservice.exception.TrackNotExistException;
 import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.IArtistService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 @Service
 @Qualifier("artist")
 public class ArtistService implements IArtistService {
@@ -27,14 +34,15 @@ public class ArtistService implements IArtistService {
     private IArtistService AService;
 
     @Autowired
-    //@Qualifier("artist")
-    private List<Artist> artists;
-
-    @Autowired
     private ArtistRepository ARepository;
 
     @Autowired
     private TrackRepository TRepository;
+
+    @Autowired
+    private ArtistMapper artistMapper;
+
+
 
     @Autowired
     private List<Artist> LArtist;
@@ -47,24 +55,7 @@ public class ArtistService implements IArtistService {
         });
     }
 
-    @Override
-    public List<Artist> getArtisList() {
-        return artists;
-    }
 
-
-    @Override
-    public ResponseEntity<Artist> getArtist(Long idArtist) {
-    /*
-        Optional<Artist> optionalArtist=ARepository.findById(idArtist);
-        optionalArtist.
-        if(optionalArtist.isPresent()){
-            ResponseEntity.ok();
-        }else return ResponseEntity.noContent().build();
-    */
-
-        return null;
-    }
 
     @Override
     public ResponseEntity<List<Artist>> getTopFiveArtist() {
@@ -106,14 +97,48 @@ public class ArtistService implements IArtistService {
     }
 
     @Override
-    public Artist createArtist(ArtistRequest request) {
-        return null;
+    public ResponseEntity<Artist> getArtistID(Long idArtist) {
+
+        Optional<Artist> optionalArtist=ARepository.findById(idArtist);
+        if(optionalArtist.isPresent()){
+            return ResponseEntity.ok(optionalArtist.get());
+
+        }else return ResponseEntity.noContent().build();
+
     }
 
     @Override
-    public void updateArtist(Long idArtist) {
+    public ResponseEntity<Artist> createArtist(ArtistRequest request) {
+        Artist artist = artistMapper.apply(request);
+        if (request.getIdArtist() != null && ARepository.findById(request.getIdArtist()) != null) {
+            log.error("Track already exists");
+            throw new ArtistExistException("Track not exist");
+        } else {
+            ARepository.save(artistMapper.apply(request));
+        }
 
-
-
+        return ResponseEntity.ok(artist);
     }
+
+    @Override
+    public ResponseEntity<Artist> updateArtist(Long idArtist, ArtistRequest request) {
+        Artist artist=new Artist();
+
+        if (TRepository.findById(idArtist) != null) {
+            artist= artistMapper.apply(request);
+            ARepository.save(artist);
+
+            return ResponseEntity.ok(artist);
+        } else {
+            log.error("Artist not exist");
+            throw new ArtistNotExistException("Artist not exist");
+        }
+    }
+
+    @Override
+    public ResponseEntity<Artist> deleteArtist(Long idArtist) {
+        ARepository.deleteById(idArtist);
+        return null;
+    }
+
 }

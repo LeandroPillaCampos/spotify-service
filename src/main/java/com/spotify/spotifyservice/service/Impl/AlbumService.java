@@ -61,14 +61,7 @@ public class AlbumService  implements IAlbumService {
 
 
     @Override
-    public List<Artist> getArtisList() {
-        return null;
-    }
-
-
-
-    @Override
-    public ResponseEntity<Artist> getArtist(Long idArtist) {
+    public ResponseEntity<Artist> getArtistID(Long idArtist) {
         return null;
     }
 
@@ -78,12 +71,18 @@ public class AlbumService  implements IAlbumService {
     }
 
     @Override
-    public Artist createArtist(ArtistRequest request) {
+    public ResponseEntity<Artist> createArtist(ArtistRequest request) {
         return null;
     }
 
     @Override
-    public void updateArtist(Long idArtist) {
-
+    public ResponseEntity<Artist> updateArtist(Long idArtist, ArtistRequest request) {
+        return null;
     }
+
+    @Override
+    public ResponseEntity<Artist> deleteArtist(Long idArtist) {
+        return null;
+    }
+
 }

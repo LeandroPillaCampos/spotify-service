@@ -142,8 +142,8 @@ public class TrackService  implements ITrackService{
     public ResponseEntity<Track> createTrack(TrackRequest request) {
         Track track = trackMapper.apply(request);
         if (request.getId() != null && TRepository.findById(request.getId()) != null) {
-            log.error("El Pinnaper ya existe");
-            throw new TrackExistException("El Pinnaper ya existe");
+            log.error("Track already exists");
+            throw new TrackExistException("Track not exist");
         } else {
             TRepository.save(trackMapper.apply(request));
         }
@@ -162,8 +162,8 @@ public class TrackService  implements ITrackService{
 
             return ResponseEntity.ok(track);
         } else {
-            log.error("El Pinnaper NO existe");
-            throw new TrackNotExistException("El Pinnaper NO existe");
+            log.error("Track not exist");
+            throw new TrackNotExistException("Track not exist");
         }
         //return ResponseEntity.ok(track);
     }
@@ -195,15 +195,10 @@ public class TrackService  implements ITrackService{
 
     }
 
-    @Override
-    public List<Artist> getArtisList() {
-        return null;
-    }
-
 
 
     @Override
-    public ResponseEntity<Artist> getArtist(Long idArtist) {
+    public ResponseEntity<Artist> getArtistID(Long idArtist) {
         return null;
     }
 
@@ -240,20 +235,18 @@ public class TrackService  implements ITrackService{
     }
 
     @Override
-    public Artist createArtist(ArtistRequest request) {
+    public ResponseEntity<Artist> createArtist(ArtistRequest request) {
         return null;
     }
 
     @Override
-    public void updateArtist(Long idArtist) {
-
+    public ResponseEntity<Artist> updateArtist(Long idArtist, ArtistRequest request) {
+        return null;
     }
-/*
+
     @Override
-    public int compareTo(Track track) {
-
-        return 0;
+    public ResponseEntity<Artist> deleteArtist(Long idArtist) {
+        return null;
     }
 
- */
 }

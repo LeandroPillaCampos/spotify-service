@@ -1,19 +1,16 @@
 package com.spotify.spotifyservice.service.Impl;
 
 import com.spotify.spotifyservice.controller.request.AlbumRequest;
-import com.spotify.spotifyservice.controller.request.ArtistRequest;
 import com.spotify.spotifyservice.domain.mapper.AlbumMapper;
 import com.spotify.spotifyservice.domain.model.Album;
-import com.spotify.spotifyservice.domain.model.Artist;
-import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.exception.AlbumNotExistException;
 import com.spotify.spotifyservice.exception.ArtistExistException;
-import com.spotify.spotifyservice.exception.ArtistNotExistException;
 import com.spotify.spotifyservice.repositories.AlbumRepository;
 import com.spotify.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -28,29 +25,29 @@ public class AlbumService  implements IAlbumService {
 
     @Qualifier("album")
     @Autowired
-    private IAlbumService AlbService;
+    private IAlbumService albService;
 
    // @Qualifier("album")
     @Autowired
-    private List<Album> LAlbum;
+    private List<Album> lAlbum;
 
     @Autowired
-    private AlbumRepository AlbRepository;
+    private AlbumRepository albumRepository;
 
     @Autowired
     private AlbumMapper albMapper;
 
     @PostConstruct
     public void init() {
-        LAlbum.stream().forEach(track -> {
+        lAlbum.stream().forEach(track -> {
             //TrackMap.put(track.getId(), track);
-            AlbRepository.save(track);
+            albumRepository.save(track);
         });
     }
 
     @Override
     public ResponseEntity<Album> getAlbumID(Long idAlbum) {
-        Optional<Album> optionalAlbum=AlbRepository.findById(idAlbum);
+        Optional<Album> optionalAlbum= albumRepository.findById(idAlbum);
         if(optionalAlbum.isPresent()){
             return ResponseEntity.ok(optionalAlbum.get());
 
@@ -61,11 +58,11 @@ public class AlbumService  implements IAlbumService {
     @Override
     public ResponseEntity<Album> createAlbum(AlbumRequest request) {
         Album album = albMapper.apply(request);
-        if (request.getIdAlbum() != null && AlbRepository.findById(request.getIdAlbum()) != null) {
+        if (request.getIdAlbum() != null && albumRepository.findById(request.getIdAlbum()) != null) {
             log.error("Album already exists");
             throw new ArtistExistException("Album not exist");
         } else {
-            AlbRepository.save(albMapper.apply(request));
+            albumRepository.save(albMapper.apply(request));
         }
         return ResponseEntity.ok(album);
     }
@@ -75,9 +72,9 @@ public class AlbumService  implements IAlbumService {
 
         Album album=new Album();
 
-        if (AlbRepository.findById(idAlbum) != null) {
+        if (albumRepository.findById(idAlbum) != null) {
             album= albMapper.apply(request);
-            AlbRepository.save(album);
+            albumRepository.save(album);
 
             return ResponseEntity.ok(album);
         } else {
@@ -88,8 +85,14 @@ public class AlbumService  implements IAlbumService {
 
     @Override
     public ResponseEntity<Album> deleteAlbum(Long idAlbum) {
-        AlbRepository.deleteById(idAlbum);
-        return null;
+
+        if(albumRepository.findById(idAlbum)==null){
+            return new ResponseEntity<Album>(HttpStatus.NOT_FOUND);
+        }else{
+            albumRepository.deleteById(idAlbum);
+            return new ResponseEntity<Album>(HttpStatus.OK);
+        }
+
     }
 
 

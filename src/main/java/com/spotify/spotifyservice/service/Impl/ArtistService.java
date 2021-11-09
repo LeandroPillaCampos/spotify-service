@@ -1,22 +1,20 @@
 package com.spotify.spotifyservice.service.Impl;
 
-import com.spotify.spotifyservice.controller.ArtistController;
 import com.spotify.spotifyservice.controller.request.ArtistRequest;
 import com.spotify.spotifyservice.domain.mapper.ArtistMapper;
+import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.exception.ArtistExistException;
 import com.spotify.spotifyservice.exception.ArtistNotExistException;
-import com.spotify.spotifyservice.exception.TrackExistException;
-import com.spotify.spotifyservice.exception.TrackNotExistException;
 import com.spotify.spotifyservice.repositories.ArtistRepository;
 import com.spotify.spotifyservice.repositories.TrackRepository;
 import com.spotify.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -31,13 +29,13 @@ public class ArtistService implements IArtistService {
 
     @Qualifier("artist")
     @Autowired
-    private IArtistService AService;
+    private IArtistService aService;
 
     @Autowired
-    private ArtistRepository ARepository;
+    private ArtistRepository aRepository;
 
     @Autowired
-    private TrackRepository TRepository;
+    private TrackRepository tRepository;
 
     @Autowired
     private ArtistMapper artistMapper;
@@ -45,13 +43,13 @@ public class ArtistService implements IArtistService {
 
 
     @Autowired
-    private List<Artist> LArtist;
+    private List<Artist> lArtist;
 
     @PostConstruct
     public void init() {
-        LArtist.stream().forEach(track -> {
+        lArtist.stream().forEach(track -> {
             //TrackMap.put(track.getId(), track);
-            ARepository.save(track);
+            aRepository.save(track);
         });
     }
 
@@ -61,7 +59,7 @@ public class ArtistService implements IArtistService {
     public ResponseEntity<List<Artist>> getTopFiveArtist() {
 
         List<Artist> TopFiveArtist = new ArrayList<>();
-        Iterable<Track> AllTracks=TRepository.findAll();
+        Iterable<Track> AllTracks= tRepository.findAll();
 
         //Iterable to List
         List<Track> TReproductions=StreamSupport
@@ -76,7 +74,7 @@ public class ArtistService implements IArtistService {
             //If TopFiveArtist contains 5 elements exit loop
             if(TopFiveArtist.size()==5) break;
 
-            Optional<Artist> optionalIDArtist=ARepository.findById(tracks.getIdArtist());
+            Optional<Artist> optionalIDArtist= aRepository.findById(tracks.getIdArtist());
 
             //Check if idArtist exist into TopFiveArtist
             if(!(TopFiveArtist.stream().anyMatch(A ->A.getIdArtist().equals(optionalIDArtist.get().getIdArtist())))){
@@ -84,9 +82,9 @@ public class ArtistService implements IArtistService {
                 TopFiveArtist.add(
                         Artist.builder().
                                 idArtist(tracks.getIdArtist())
-                                .name(ARepository.findById(tracks.getIdArtist()).get().getName())
-                                .genre(ARepository.findById(tracks.getIdArtist()).get().getGenre())
-                                .image(ARepository.findById(tracks.getIdArtist()).get().getImage())
+                                .name(aRepository.findById(tracks.getIdArtist()).get().getName())
+                                .genre(aRepository.findById(tracks.getIdArtist()).get().getGenre())
+                                .image(aRepository.findById(tracks.getIdArtist()).get().getImage())
                                 .build()
                 );
             }
@@ -99,7 +97,7 @@ public class ArtistService implements IArtistService {
     @Override
     public ResponseEntity<Artist> getArtistID(Long idArtist) {
 
-        Optional<Artist> optionalArtist=ARepository.findById(idArtist);
+        Optional<Artist> optionalArtist= aRepository.findById(idArtist);
         if(optionalArtist.isPresent()){
             return ResponseEntity.ok(optionalArtist.get());
 
@@ -110,11 +108,11 @@ public class ArtistService implements IArtistService {
     @Override
     public ResponseEntity<Artist> createArtist(ArtistRequest request) {
         Artist artist = artistMapper.apply(request);
-        if (request.getIdArtist() != null && ARepository.findById(request.getIdArtist()) != null) {
+        if (request.getIdArtist() != null && aRepository.findById(request.getIdArtist()) != null) {
             log.error("Track already exists");
             throw new ArtistExistException("Track not exist");
         } else {
-            ARepository.save(artistMapper.apply(request));
+            aRepository.save(artistMapper.apply(request));
         }
 
         return ResponseEntity.ok(artist);
@@ -124,9 +122,9 @@ public class ArtistService implements IArtistService {
     public ResponseEntity<Artist> updateArtist(Long idArtist, ArtistRequest request) {
         Artist artist=new Artist();
 
-        if (ARepository.findById(idArtist) != null) {
+        if (aRepository.findById(idArtist) != null) {
             artist= artistMapper.apply(request);
-            ARepository.save(artist);
+            aRepository.save(artist);
 
             return ResponseEntity.ok(artist);
         } else {
@@ -137,8 +135,12 @@ public class ArtistService implements IArtistService {
 
     @Override
     public ResponseEntity<Artist> deleteArtist(Long idArtist) {
-        ARepository.deleteById(idArtist);
-        return null;
+        if(aRepository.findById(idArtist)==null){
+            return new ResponseEntity<Artist>(HttpStatus.NOT_FOUND);
+        }else{
+            aRepository.deleteById(idArtist);
+            return new ResponseEntity<Artist>(HttpStatus.OK);
+        }
     }
 
 }

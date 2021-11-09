@@ -1,9 +1,7 @@
 package com.spotify.spotifyservice.controller;
 
 import com.spotify.spotifyservice.controller.request.AlbumRequest;
-import com.spotify.spotifyservice.controller.request.TrackRequest;
 import com.spotify.spotifyservice.domain.model.Album;
-import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.repositories.AlbumRepository;
 import com.spotify.spotifyservice.service.Impl.AlbumService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,30 +16,30 @@ import org.springframework.web.bind.annotation.*;
 public class AlbumController {
 
     @Autowired
-    private AlbumRepository AlbRepository;
+    private AlbumRepository albRepository;
 
     @Autowired
-    private AlbumService AlbService;
+    private AlbumService albService;
 
 
     @PostMapping("/album")
     public ResponseEntity<Album> postAlbum(@Validated @RequestBody AlbumRequest request){
-        return AlbService.createAlbum(request);
+        return albService.createAlbum(request);
     }
 
     @PutMapping("/album/{albumId}")
     public ResponseEntity<Album> putAlbum(@Validated @RequestBody AlbumRequest request, @PathVariable("albumId") Long idAlbum){
-        return AlbService.updateAlbum(idAlbum ,request);
+        return albService.updateAlbum(idAlbum ,request);
     }
 
     @GetMapping("/album/{albumId}")
     public ResponseEntity<Album> getAlbumID(@PathVariable("albumId") Long idAlbum){
-        return AlbService.getAlbumID(idAlbum);
+        return albService.getAlbumID(idAlbum);
     }
 
     @DeleteMapping("/album/{albumId}")
     public ResponseEntity<Album> deleteAlbum(@PathVariable("albumId") Long idAlbum){
-        return AlbService.deleteAlbum(idAlbum);
+        return albService.deleteAlbum(idAlbum);
     }
 
 }

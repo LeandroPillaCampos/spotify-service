@@ -18,47 +18,44 @@ import java.util.List;
 public class TrackController {
 
     @Autowired
-    private TrackRepository TRepository;
+    private TrackRepository tRepository;
 
     @Autowired
-    private TrackService TService;
-
-    @Autowired
-    private ArtistService AService;
+    private TrackService tService;
 
     @GetMapping(path = "/spotify/play/track/{trackId}")
     public ResponseEntity<Track> getReproductions(@PathVariable("trackId")Long id){
-        return TService.getTrack(id);
+        return tService.getTrack(id);
     }
 
     @GetMapping("/artist/{artistId}/songs/rank")
     public ResponseEntity<List<Track>> getTopFiveTracks(@PathVariable("artistId") Long idArtist){
-        return TService.getTopFiveTrack(idArtist);
+        return tService.getTopFiveTrack(idArtist);
     }
 
     @GetMapping("/track/rank")
     public ResponseEntity<List<Track>> getTopFivePopulars(){
-        return TService.getTopFivePopulars();
+        return tService.getTopFivePopulars();
     }
 
     @PostMapping("/track")
     public ResponseEntity<Track> postTrack(@Validated @RequestBody TrackRequest request){
-        return TService.createTrack(request);
+        return tService.createTrack(request);
     }
 
     @PutMapping("/track/{trackId}")
     public ResponseEntity<Track> putTrack(@Validated @RequestBody TrackRequest request, @PathVariable("trackId") Long id){
-        return TService.updateTrack(id ,request);
+        return tService.updateTrack(id ,request);
     }
 
     @GetMapping("/track/{trackId}")
     public ResponseEntity<Track> getTrackID(@PathVariable("trackId") Long id){
-        return TService.getTrackID(id);
+        return tService.getTrackID(id);
     }
 
     @DeleteMapping("/track/{trackId}")
         public ResponseEntity<Track> deleteTrack(@PathVariable("trackId") Long id){
-            return TService.deleteTrack(id);
+            return tService.deleteTrack(id);
         }
     }
 

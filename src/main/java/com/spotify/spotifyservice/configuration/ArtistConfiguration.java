@@ -13,9 +13,8 @@ import java.util.List;
 @Configuration
 public class ArtistConfiguration {
 
-
     @Bean("artist")
-    public List<Artist> getArtists(){
+    public List<Artist> getArtists() {
         return Arrays.asList(
                 Artist.builder().idArtist(1L).name("Bon Jovi").genre("Rock").image("image").build(),
                 Artist.builder().idArtist(2L).name("The Rolling Stones").genre("Rock").image("image").build(),

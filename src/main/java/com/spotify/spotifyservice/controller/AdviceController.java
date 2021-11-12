@@ -31,15 +31,13 @@ public class AdviceController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({TrackExistException.class,ArtistExistException.class, AlbumExistException.class})
+    @ExceptionHandler({TrackExistException.class, ArtistExistException.class, AlbumExistException.class})
     public Map<String, String> handlerValidationException(TrackExistException ex) {
         Map<String, String> errors = new HashMap<>();
         String fieldName = "Error: ";
         errors.put(fieldName, ex.getMessage());
         return errors;
     }
-
-
 
 
 }

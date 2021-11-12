@@ -5,8 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface IAlbumService  {
-
+public interface AlbumService {
 
     ResponseEntity<Album> getAlbumID(Long idAlbum);
     ResponseEntity<Album> createAlbum(AlbumRequest request);

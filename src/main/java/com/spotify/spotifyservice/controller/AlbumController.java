@@ -3,7 +3,7 @@ package com.spotify.spotifyservice.controller;
 import com.spotify.spotifyservice.controller.request.AlbumRequest;
 import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.repositories.AlbumRepository;
-import com.spotify.spotifyservice.service.Impl.AlbumService;
+import com.spotify.spotifyservice.service.Impl.ImplAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,30 +16,29 @@ import org.springframework.web.bind.annotation.*;
 public class AlbumController {
 
     @Autowired
-    private AlbumRepository albRepository;
+    private AlbumRepository albumRepository;
 
     @Autowired
-    private AlbumService albService;
-
+    private ImplAlbumService albumService;
 
     @PostMapping("/album")
-    public ResponseEntity<Album> postAlbum(@Validated @RequestBody AlbumRequest request){
-        return albService.createAlbum(request);
+    public ResponseEntity<Album> postAlbum(@Validated @RequestBody AlbumRequest request) {
+        return albumService.createAlbum(request);
     }
 
     @PutMapping("/album/{albumId}")
-    public ResponseEntity<Album> putAlbum(@Validated @RequestBody AlbumRequest request, @PathVariable("albumId") Long idAlbum){
-        return albService.updateAlbum(idAlbum ,request);
+    public ResponseEntity<Album> putAlbum(@Validated @RequestBody AlbumRequest request, @PathVariable("albumId") Long idAlbum) {
+        return albumService.updateAlbum(idAlbum, request);
     }
 
     @GetMapping("/album/{albumId}")
-    public ResponseEntity<Album> getAlbumID(@PathVariable("albumId") Long idAlbum){
-        return albService.getAlbumID(idAlbum);
+    public ResponseEntity<Album> getAlbumID(@PathVariable("albumId") Long idAlbum) {
+        return albumService.getAlbumID(idAlbum);
     }
 
     @DeleteMapping("/album/{albumId}")
-    public ResponseEntity<Album> deleteAlbum(@PathVariable("albumId") Long idAlbum){
-        return albService.deleteAlbum(idAlbum);
+    public ResponseEntity<Album> deleteAlbum(@PathVariable("albumId") Long idAlbum) {
+        return albumService.deleteAlbum(idAlbum);
     }
 
 }

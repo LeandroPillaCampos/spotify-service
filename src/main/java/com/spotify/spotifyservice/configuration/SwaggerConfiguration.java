@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select().apis(RequestHandlerSelectors.basePackage("com.spotify.spotifyservice"))
                 .paths(PathSelectors.any())
@@ -23,8 +23,7 @@ public class SwaggerConfiguration {
     }
 
 
-
-    private ApiInfo info(){
+    private ApiInfo info() {
         return new ApiInfoBuilder()
                 .title("Spotify Service")
                 .description("Service of registration, search and return of Tracks, Artist and Album for music reproduction platform via streaming")

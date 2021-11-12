@@ -10,13 +10,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface IArtistService {
+public interface ArtistService {
 
     ResponseEntity<List<Artist>> getTopFiveArtist();
     ResponseEntity<Artist> getArtistID(Long idArtist);
     ResponseEntity<Artist> createArtist(ArtistRequest request);
     ResponseEntity<Artist> updateArtist (Long idArtist, ArtistRequest request);
     ResponseEntity<Artist> deleteArtist(Long idArtist);
+    ResponseEntity<List<Track>> getTopFiveArtistTracks(Long idArtist);
 
 
 }

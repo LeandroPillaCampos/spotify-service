@@ -12,13 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public interface ITrackService  {
+public interface TrackService {
 
-    //Iterable<Track> getTrackList();
     ResponseEntity<Track> getTrackID(Long id);
-    ResponseEntity<List<Track>> getTopFiveTrack(Long id);
-    ResponseEntity<List<Track>> getTopFivePopulars();
-    ResponseEntity<Track> getTrack(Long id);
+    ResponseEntity<List<Track>> getTopFivePopularTracks();
+    ResponseEntity<Track> getIncreaseTrack(Long id);
     ResponseEntity<Track> createTrack(TrackRequest request);
     ResponseEntity<Track> updateTrack (Long id , TrackRequest request);
     ResponseEntity<Track> deleteTrack(Long id);

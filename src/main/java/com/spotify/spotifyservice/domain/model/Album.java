@@ -1,14 +1,13 @@
 package com.spotify.spotifyservice.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,23 +22,16 @@ public class Album {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long idAlbum;
-    private Long idArtist;
-    @NotEmpty(message = "The 'name' field can not be empty")
-    @NotNull(message = "The 'name' field can not be empty")
-    @Size(min=3, max=100, message="The number of characters is not allowed")
+    @Column(name = "ALBUM_ID")
+    private Long idAlbum;
     private String name;
 
-    @OneToMany(mappedBy = "joinAlbum")
-    private List<Track> joinTrack=new ArrayList<>();
-
+    @OneToMany(mappedBy = "album")
+    @JsonIgnore
+    private List<Track> track = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn()
-    private Artist joinArtist;
-
-
-
-
+    @JoinColumn(name = "ARTIST_ID")
+    private Artist artist;
 
 }

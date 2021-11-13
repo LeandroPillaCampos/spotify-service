@@ -35,6 +35,7 @@ class ArtistServiceTest {
     @Mock
     private ArtistRequest artistRequest;
 
+    
     @Mock
     private ArtistMapper artistMapper;
 

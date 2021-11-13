@@ -48,7 +48,6 @@ public class ImplArtistService implements com.spotify.spotifyservice.service.Art
         });
     }
 
-
     @Override
     public ResponseEntity<List<Artist>> getTopFiveArtist() {
 

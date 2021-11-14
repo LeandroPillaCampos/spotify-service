@@ -6,6 +6,7 @@ import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.repositories.AlbumRepository;
+import com.spotify.spotifyservice.service.Impl.ImplAlbumService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

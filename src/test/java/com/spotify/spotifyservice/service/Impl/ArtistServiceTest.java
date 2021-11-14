@@ -6,6 +6,7 @@ import com.spotify.spotifyservice.domain.model.Album;
 import com.spotify.spotifyservice.domain.model.Artist;
 import com.spotify.spotifyservice.domain.model.Track;
 import com.spotify.spotifyservice.repositories.ArtistRepository;
+import com.spotify.spotifyservice.service.Impl.ImplArtistService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ class ArtistServiceTest {
     private Artist artist;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         artist = Artist.builder()
                 .idArtist(1L)
@@ -55,10 +56,10 @@ class ArtistServiceTest {
     @Test
     void getArtistID() {
 
-        Long idArtist=2L;
+        Long idArtist = 2L;
 
         artistService.getArtistID(idArtist);
-        when(artistRepository.findById(idArtist)).thenReturn( Optional.ofNullable(artist));
+        when(artistRepository.findById(idArtist)).thenReturn(Optional.ofNullable(artist));
 
         Optional<Artist> optionalArtist = artistRepository.findById(idArtist);
         assertNotNull(optionalArtist.get());
@@ -69,7 +70,7 @@ class ArtistServiceTest {
     @Test
     void deleteArtist() {
 
-        Long idArtist=2L;
+        Long idArtist = 2L;
 
         artistService.deleteArtist(idArtist);
         artistRepository.deleteById(idArtist);
@@ -79,7 +80,7 @@ class ArtistServiceTest {
     }
 
     @Test
-    void createTrack(){
+    void createTrack() {
 
         artistRequest.setIdArtist(2L);
         artistRequest.setName("testName");
@@ -95,9 +96,9 @@ class ArtistServiceTest {
 
 
     @Test
-    void updateTrack(){
+    void updateTrack() {
 
-        Long idArtist=2L;
+        Long idArtist = 2L;
         artist.setName("newTestName");
 
         artistRequest.setIdArtist(2L);
@@ -105,14 +106,45 @@ class ArtistServiceTest {
         artistRequest.setGenre("newGenreTest");
         artistRequest.setImage("newImageTest");
 
-        Optional<Artist> optionalArtist=Optional.of(artist);
+        Optional<Artist> optionalArtist = Optional.of(artist);
         when(artistRepository.findById(idArtist)).thenReturn(optionalArtist);
 
-        artistService.updateArtist(idArtist,artistRequest);
+        artistService.updateArtist(idArtist, artistRequest);
         Artist response = artistMapper.apply(artistRequest);
         artistRepository.save(response);
 
-        Artist testTrack= artistRepository.findById(2L).get();
-        assertEquals(testTrack.getName(),"newTestName");
+        Artist testTrack = artistRepository.findById(2L).get();
+        assertEquals(testTrack.getName(), "newTestName");
     }
+
+    @Test
+    void getTopFiveArtistTracks() {
+        Long idArtist = 2L;
+
+        Optional<Artist> optionalArtist = artistRepository.findById(idArtist);
+
+        artistService.getTopFiveArtistTracks(idArtist);
+
+        when(artistRepository.findById(idArtist)).thenReturn(Optional.ofNullable(artist));
+
+        assertNotNull(optionalArtist);
+    }
+
+    @Test
+    void getTopFiveArtist() {
+
+        Long idArtist = 2L;
+
+        Optional<Artist> optionalArtist = artistRepository.findById(idArtist);
+
+        artistService.getTopFiveArtist();
+
+        when(artistRepository.findById(idArtist)).thenReturn(Optional.ofNullable(artist));
+
+        assertNotNull(optionalArtist);
+
+        assertNotNull(artistRepository.findAll());
+
+    }
+
 }

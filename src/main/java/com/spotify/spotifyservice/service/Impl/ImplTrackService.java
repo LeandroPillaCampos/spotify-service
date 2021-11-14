@@ -35,7 +35,7 @@ public class ImplTrackService implements com.spotify.spotifyservice.service.Trac
     @Autowired
     private TrackMapper trackMapper;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         trackList.stream().forEach(track -> {
             trackRepository.save(track);

@@ -40,7 +40,7 @@ public class ImplArtistService implements com.spotify.spotifyservice.service.Art
     @Autowired
     private List<Artist> artistList;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         artistList.stream().forEach(track -> {
             //TrackMap.put(track.getId(), track);

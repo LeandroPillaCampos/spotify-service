@@ -33,7 +33,7 @@ public class ImplAlbumService implements com.spotify.spotifyservice.service.Albu
     @Autowired
     private AlbumMapper albumMapper;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         albumList.stream().forEach(track -> {
             //TrackMap.put(track.getId(), track);
